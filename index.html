@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Select a Link</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: 50px auto;
+      max-width: 400px;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(118, 75, 162, 0.6);
+      color: #f3f4f6;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+    .buttons-container {
+      margin-bottom: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+    .link-button {
+      flex: 1 1 40%;
+      min-width: 120px;
+      padding: 12px 24px;
+      background-color: #1e40af;
+      color: #93c5fd;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 16px;
+      transition: background-color 0.3s, color 0.3s;
+      box-shadow: none;
+    }
+    .link-button.selected {
+      background-color: #2563eb;
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.5);
+    }
+    .link-button:hover:not(.selected) {
+      background-color: #2563eb;
+      color: #fff;
+    }
+    #go-button {
+      padding: 14px 40px;
+      background-color: #64748b;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: not-allowed;
+      font-weight: 700;
+      font-size: 18px;
+      box-shadow: none;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+    #go-button.enabled {
+      background-color: #22c55e;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(34, 197, 94, 0.6);
+    }
+    #go-button.enabled:hover {
+      background-color: #16a34a;
+      box-shadow: 0 6px 20px rgba(22, 163, 74, 0.8);
+    }
+  </style>
+</head>
+<body>
+  <h1>Tools</h1>
+  <div class="buttons-container" id="buttons-container">
+    <!-- Buttons will be inserted here -->
+  </div>
+  <button id="go-button" disabled>Go to ...</button>
+
+  <script>
+    const links = {
+      "Cc": "https://genccvalid.vercel.app/",
+      "Instagram": "https://instagram.com/robutcer",
+      "Telegram": "https://t.me/sangpendosahandal",
+      "Ch Wa": "https://whatsapp.com/channel/0029VaPN3yJ6hENm0YI55a2M"
+    };
+
+    const buttonsContainer = document.getElementById('buttons-container');
+    const goButton = document.getElementById('go-button');
+    let selectedKey = null;
+
+    function updateGoButton() {
+      if (selectedKey) {
+        goButton.disabled = false;
+        goButton.classList.add('enabled');
+        goButton.textContent = 'Go to ' + selectedKey;
+      } else {
+        goButton.disabled = true;
+        goButton.classList.remove('enabled');
+        goButton.textContent = 'Go to ...';
+      }
+    }
+
+    function handleButtonClick(key) {
+      selectedKey = key;
+      // Update button styles
+      Array.from(buttonsContainer.children).forEach(btn => {
+        if (btn.dataset.key === key) {
+          btn.classList.add('selected');
+        } else {
+          btn.classList.remove('selected');
+        }
+      });
+      updateGoButton();
+    }
+
+    // Create buttons
+    Object.keys(links).forEach(key => {
+      const btn = document.createElement('button');
+      btn.textContent = key;
+      btn.className = 'link-button';
+      btn.dataset.key = key;
+      btn.addEventListener('click', () => handleButtonClick(key));
+      buttonsContainer.appendChild(btn);
+    });
+
+    goButton.addEventListener('click', () => {
+      if (selectedKey) {
+        window.open(links[selectedKey], '_blank');
+      }
+    });
+
+    updateGoButton();
+  </script>
+</body>
+</html>
